@@ -12,7 +12,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'change-me-for-production')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+
 
 # Application definition
 INSTALLED_APPS = [
@@ -24,6 +25,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'corsheaders',
+    'djongo',
+    'octofit_tracker',
 ]
 
 MIDDLEWARE = [
@@ -58,13 +61,25 @@ TEMPLATES = [
 WSGI_APPLICATION = 'octofit_tracker.wsgi.application'
 
 # Database
-# Use SQLite for initial scaffold. Configure MongoDB/djongo later if desired.
+# Use Djongo to connect to MongoDB octofit_db
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'djongo',
+        'NAME': 'octofit_db',
+        'ENFORCE_SCHEMA': False,
+        'CLIENT': {
+            'host': 'mongodb://localhost:27017/',
+            'username': '',
+            'password': '',
+            'authSource': 'admin',
+        },
     }
 }
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_HEADERS = ['*']
+CORS_ALLOW_METHODS = ['*']
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
